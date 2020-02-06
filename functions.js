@@ -94,14 +94,32 @@ function titlesByAuthorName(authorName, authors, books) {
  ****************************************************************/
 function mostProlificAuthor(authors) {
   // Your code goes here
-  let x = authors.map(author => author.books.length);
+
+  let x = bookCountsByAuthor(authors);
   // console.log(x);
-  let y = Math.max(...x);
-  return authors.forEach(author => {
-    if (author.books.length === y) {
-      console.log(author.name);
+
+  const compare = (a, b) => {
+    let comparison = 0;
+    if (a.bookCount > b.bookCount) {
+      comparison = 1;
+    } else if (a.bookCount < b.bookCount) {
+      comparison = -1;
     }
-  });
+    return comparison;
+  };
+  let y = x.sort(compare);
+  console.log(y);
+
+  return y.pop();
+
+  // let x = authors.map(author => author.books.length);
+  // console.log(x);
+  // // let y = Math.max(...x);
+  // // return authors.forEach(author => {
+  // //   if (author.books.length === y) {
+  // //     console.log(author.name);
+  // //   }
+  // // });
 
   // if (bookCountsByAuthor(authors).bookCount)
 }
@@ -131,6 +149,20 @@ function mostProlificAuthor(authors) {
  ****************************************************************/
 function relatedBooks(bookId, authors, books) {
   // Your code goes here
+  let book = getBookById(bookId, books);
+  if (book.authors.length > 1) {
+    let authorNames = book.authors.map(book => book.name);
+    let arrays = authorNames.map(authorName =>
+      titlesByAuthorName(authorName, authors, books)
+    );
+    const merge = Array.prototype.concat.apply([], arrays);
+    // console.log(merge);
+    let removeDupes = merge => merge.filter((a, b) => merge.indexOf(a) === b);
+    return removeDupes(merge);
+    // console.log(arrays);
+  } else {
+    return titlesByAuthorName(book.authors[0].name, authors, books);
+  }
 }
 
 /**************************************************************
@@ -141,6 +173,29 @@ function relatedBooks(bookId, authors, books) {
  ****************************************************************/
 function friendliestAuthor(authors) {
   // Your code goes here
+  let authorList = authors.map(author => ({
+    name: author.name,
+    books: author.books
+  }));
+  console.log(authorList);
+
+  // let bookList = authors.map()
+
+  // let multipleAuthors = books.filter(book => book.authors.length > 1);
+  // console.log(multipleAuthors);
+
+  // let friendlyAuthor = multipleAuthors.map(author => author.authors[0].name);
+  // console.log(friendlyAuthor);
+
+  // let authorName = friendlyAuthor[0];
+
+  // friendlyAuthor.forEach(author => {
+  //   if (author.length > authorName.length) {
+  //     authorName = author;
+  //   }
+  // });
+
+  // return authorName;
 }
 
 module.exports = {
@@ -159,14 +214,14 @@ module.exports = {
  * want to manually test your code
  */
 
-// const authors = require("./authors.json");
-// const books = require("./books.json");
+const authors = require("./authors.json");
+const books = require("./books.json");
 
-// console.log(getBookById(12, books));
-// console.log(getAuthorByName("J.K. Rowling", authors));
-// console.log(bookCountsByAuthor(authors));
-// console.log(booksByColor(books));
-// console.log(titlesByAuthorName("George R.R. Martin", authors, books));
+// // // // // // console.log(getBookById(12, books));
+// // // // // // console.log(getAuthorByName("J.K. Rowling", authors));
+// // // // // // console.log(bookCountsByAuthor(authors));
+// // // // // // console.log(booksByColor(books));
+// // // // // // console.log(titlesByAuthorName("George R.R. Martin", authors, books));
 // console.log(mostProlificAuthor(authors));
-// console.log(relatedBooks(50, authors, books));
-// console.log(friendliestAuthor(authors));
+// console.log(relatedBooks(31, authors, books));
+console.log(friendliestAuthor(authors));

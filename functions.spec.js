@@ -172,7 +172,7 @@ describe("relatedBooks(bookId, authors, books)", () => {
    * Remove the x to unskip and run the bonus test.
    * Add an x to the previous test to skip it
    */
-  xtest("BONUS - removes duplicate books", () => {
+  test("BONUS - removes duplicate books", () => {
     const expected = [
       "Good Omens",
       "Neverwhere",
